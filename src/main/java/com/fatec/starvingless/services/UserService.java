@@ -40,4 +40,28 @@ public class UserService {
         }
         return repository.save(mapper.map(userDTO, User.class));
     }
+
+//    public User update(UserDTO userDTO){
+//        finById(userDTO.getId());
+//        return repository.save(mapper.map(userDTO, User.class));
+//    }
+
+    public User update(UserDTO userDTO) {
+        Optional<User> optionalUser = repository.findById(userDTO.getId());
+        User user = optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found."));
+
+        if (!user.getCpf().equals(userDTO.getCpf()) && repository.findByCpf(userDTO.getCpf()).isPresent()) {
+            throw new UserAlreadyExistsException("CPF already exists.");
+        }
+
+        if (!user.getEmail().equals(userDTO.getEmail()) && repository.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException("Email already exists.");
+        }
+
+        User updatedUser = mapper.map(userDTO, User.class);
+        updatedUser.setPassword(user.getPassword()); // preserve the original password
+        User savedUser = repository.save(updatedUser);
+
+        return mapper.map(savedUser, User.class);
+    }
 }

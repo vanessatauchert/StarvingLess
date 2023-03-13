@@ -1,11 +1,11 @@
 package com.fatec.starvingless.controllers;
 
 import com.fatec.starvingless.dto.UserDTO;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +48,13 @@ public class UserController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
                 .buildAndExpand(service.create(userDTO).getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/update" + ID)
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+        userDTO.setId(id);
+        User updatedUser = service.update(userDTO);
+        UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
+        return ResponseEntity.ok(updatedUserDTO);
     }
 }
