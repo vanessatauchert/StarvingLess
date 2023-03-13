@@ -1,6 +1,7 @@
 package com.fatec.starvingless.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.InvalidCpfException;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,17 +30,18 @@ public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    @NotNull(message = "Mandatory field")
+    @NotBlank(message = "Mandatory field")
     private String name;
-    @NotNull(message = "Mandatory field")
+    @NotBlank(message = "Mandatory field")
     private String cpf;
-    @NotNull(message = "Mandatory field")
+    @NotBlank(message = "Mandatory field")
     private String address;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank
     private String password;
-    @NotNull(message = "Mandatory field")
+    @NotBlank(message = "Mandatory field")
     private String email;
-    @NotNull(message = "Mandatory field")
+    @NotBlank(message = "Mandatory field")
     private String phone;
     @NotBlank(message = "The date cannot be future ")
     private String signUpDate;
