@@ -9,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,5 +41,12 @@ public class UserController {
         return ResponseEntity.ok().body(service.findAll(PageRequest.of(page, size)).stream()
                 .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
 
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
+                .buildAndExpand(service.create(userDTO).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }
