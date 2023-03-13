@@ -2,6 +2,9 @@ package com.fatec.starvingless.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fatec.starvingless.entities.User;
+import com.fatec.starvingless.services.exceptions.InvalidCpfException;
+import com.fatec.starvingless.services.exceptions.InvalidDateException;
+import com.fatec.starvingless.services.exceptions.InvalidPhoneException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,7 +64,7 @@ public class UserDTO implements Serializable {
         if (cpfIsValid(cpf)) {
             this.cpf = cpf;
         } else {
-            throw new IllegalArgumentException("Invalid CPF format");
+            throw new InvalidCpfException("Ex: xxx.xxx.xxx-xx");
         }
     }
 
@@ -69,7 +72,7 @@ public class UserDTO implements Serializable {
         if (phoneIsValid(phone)) {
             this.phone = phone;
         } else {
-            throw new IllegalArgumentException("Invalid phone format");
+            throw new InvalidPhoneException("Ex: (xx)xxxxx-xxxx");
         }
     }
 
@@ -77,7 +80,7 @@ public class UserDTO implements Serializable {
         if (signUpDateIsValid(signUpDate)) {
             this.signUpDate = signUpDate;
         } else {
-            throw new IllegalArgumentException("Invalid date format");
+            throw new InvalidDateException("Ex: dd/MM/yyyy");
         }
     }
 
