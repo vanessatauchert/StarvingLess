@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/starvingless/v1")
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
     private ModelMapper mapper;
 
     @GetMapping("/id" + ID)
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id){
+    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
         return ResponseEntity.ok().body(mapper.map(service.finById(id), UserDTO.class));
     }
 }
