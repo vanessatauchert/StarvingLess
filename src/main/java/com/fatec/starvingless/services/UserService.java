@@ -21,7 +21,7 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public User finById(Long id) {
+    public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(()-> new ObjectNotFoundException("ID not found!"));
     }
@@ -63,5 +63,10 @@ public class UserService {
         User savedUser = repository.save(updatedUser);
 
         return mapper.map(savedUser, User.class);
+    }
+
+    public void delete(Long id){
+        findById(id);
+        repository.deleteById(id);
     }
 }

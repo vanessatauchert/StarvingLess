@@ -32,7 +32,7 @@ public class UserController {
 
     @GetMapping("/id" + ID)
     public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
-        return ResponseEntity.ok().body(mapper.map(service.finById(id), UserDTO.class));
+        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
     }
 
     @GetMapping("/list")
@@ -56,5 +56,11 @@ public class UserController {
         User updatedUser = service.update(userDTO);
         UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
         return ResponseEntity.ok(updatedUserDTO);
+    }
+
+    @DeleteMapping("/delete" + ID)
+    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
