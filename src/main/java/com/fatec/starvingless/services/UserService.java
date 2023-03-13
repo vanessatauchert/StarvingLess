@@ -5,6 +5,8 @@ import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,5 +22,9 @@ public class UserService {
     public User finById(Long id) {
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(()-> new ObjectNotFoundException("ID not found!"));
+    }
+
+    public Page<User> findAll(Pageable pageable){
+        return repository.findAll(pageable);
     }
 }
