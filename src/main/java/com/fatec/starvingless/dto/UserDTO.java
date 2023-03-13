@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.InvalidCpfException;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
+import com.fatec.starvingless.services.exceptions.InvalidEmailException;
 import com.fatec.starvingless.services.exceptions.InvalidPhoneException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -30,14 +30,13 @@ public class UserDTO implements Serializable {
     private Long id;
     @NotNull(message = "Mandatory field")
     private String name;
-    @CPF
     @NotNull(message = "Mandatory field")
     private String cpf;
     @NotNull(message = "Mandatory field")
     private String address;
     @JsonIgnore
     private String password;
-    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Please verify your email")
+    @NotNull(message = "Mandatory field")
     private String email;
     @NotNull(message = "Mandatory field")
     private String phone;
@@ -57,6 +56,8 @@ public class UserDTO implements Serializable {
     }
 
     private static final Pattern CPF_PATTERN = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$");
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\\)? ?(?:[2-8]|9[1-9])[0-9]{3}\\-?[0-9]{4}$");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -65,6 +66,14 @@ public class UserDTO implements Serializable {
             this.cpf = cpf;
         } else {
             throw new InvalidCpfException("Ex: xxx.xxx.xxx-xx");
+        }
+    }
+
+    public void setEmail(String email) {
+        if (emailIsValid(email)) {
+            this.email = email;
+        } else {
+            throw new InvalidEmailException("Verify your e-mail address");
         }
     }
 
@@ -86,6 +95,10 @@ public class UserDTO implements Serializable {
 
     private boolean cpfIsValid(String cpf) {
         return CPF_PATTERN.matcher(cpf).matches();
+    }
+
+    private boolean emailIsValid(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 
     private boolean phoneIsValid(String phone) {
