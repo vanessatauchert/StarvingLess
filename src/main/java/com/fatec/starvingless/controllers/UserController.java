@@ -2,7 +2,6 @@ package com.fatec.starvingless.controllers;
 
 import com.fatec.starvingless.dto.UserDTO;
 import com.fatec.starvingless.entities.User;
-import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class UserController {
     public static final String ID = "/{id}";
     @Autowired
     private UserService service;
-
-    @Autowired
-    private UserRepository repository;
 
     @Autowired
     private ModelMapper mapper;
