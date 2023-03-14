@@ -1,6 +1,5 @@
 package com.fatec.starvingless.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.InvalidCpfException;
@@ -11,10 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -29,27 +26,47 @@ public class UserDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("Id")
     private Long id;
-    @NotBlank(message = "Mandatory field")
-    private String name;
-    @NotBlank(message = "Mandatory field")
-    private String cpf;
-    @NotBlank(message = "Mandatory field")
-    private String address;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank(message = "Required field")
+    @Size(min = 2, max = 80)
+    @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-]*$",
+            message = "Name cannot contain special characters")
+    @JsonProperty("FirstName")
+    private String firstName;
+    @NotBlank(message = "Required field")
+    @Size(min = 2, max = 80)
+    @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-]*$",
+            message = "Last Name cannot contain special characters")
+    @JsonProperty("LastName")
+    private String lastName;
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
+    @Column(unique = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value= "CPF")
+    private String cpf;
+    @NotBlank(message = "Required field")
+    @JsonProperty("Address")
+    private String address;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value= "Password")
+    @NotBlank
+    @Size(min = 8, max = 128)
     private String password;
-    @NotBlank(message = "Mandatory field")
+    @NotBlank(message = "Required field")
+    @JsonProperty("e-mail")
     private String email;
-    @NotBlank(message = "Mandatory field")
+    @NotBlank(message = "Required field")
+    @JsonProperty("Phone")
     private String phone;
-    @NotBlank(message = "The date cannot be future ")
+    @NotBlank(message = "Required field")
+    @JsonProperty("SignUpDate")
     private String signUpDate;
 
 
     public UserDTO (User user){
         id = user.getId();
-        name = user.getName();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
         cpf = user.getCpf();
         address = user.getAddress();
         password = user.getPassword();
@@ -61,14 +78,15 @@ public class UserDTO implements Serializable {
     private static final Pattern CPF_PATTERN = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$");
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\\)? ?(?:[2-8]|9[1-9])[0-9]{3}\\-?[0-9]{4}$");
+    private static final Pattern PHONE_PATTERN = Pattern
+            .compile("^\\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\\)? ?(?:[2-8]|9[1-9])[0-9]{3}\\-?[0-9]{4}$");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public void setCpf(String cpf) {
         if (cpfIsValid(cpf)) {
             this.cpf = cpf;
         } else {
-            throw new InvalidCpfException("Ex: xxx.xxx.xxx-xx");
+            throw new InvalidCpfException("Ex: 000.000.000-00");
         }
     }
 
@@ -84,7 +102,7 @@ public class UserDTO implements Serializable {
         if (phoneIsValid(phone)) {
             this.phone = phone;
         } else {
-            throw new InvalidPhoneException("Ex: (xx)xxxxx-xxxx");
+            throw new InvalidPhoneException("Ex: (11)99999-9999");
         }
     }
 
@@ -96,9 +114,7 @@ public class UserDTO implements Serializable {
         }
     }
 
-    private boolean cpfIsValid(String cpf) {
-        return CPF_PATTERN.matcher(cpf).matches();
-    }
+    private boolean cpfIsValid(String cpf) { return CPF_PATTERN.matcher(cpf).matches();}
 
     private boolean emailIsValid(String email) {
         return EMAIL_PATTERN.matcher(email).matches();
