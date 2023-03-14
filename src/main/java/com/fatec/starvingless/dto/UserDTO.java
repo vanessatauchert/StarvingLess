@@ -108,7 +108,16 @@ public class UserDTO implements Serializable {
 
     public void setSignUpDate(String signUpDate) {
         if (signUpDateIsValid(signUpDate)) {
-            this.signUpDate = signUpDate;
+            try {
+                Date date = DATE_FORMAT.parse(signUpDate);
+                Date currentDate = new Date();
+                if (date.after(currentDate)) {
+                    throw new InvalidDateException("SignUpDate cannot be greater than the current date");
+                }
+                this.signUpDate = signUpDate;
+            } catch (ParseException e) {
+                throw new InvalidDateException("Ex: dd/MM/yyyy");
+            }
         } else {
             throw new InvalidDateException("Ex: dd/MM/yyyy");
         }
