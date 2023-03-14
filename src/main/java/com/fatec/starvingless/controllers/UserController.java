@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/starvingless/v1")
+@RequestMapping("/api/starvingless/user/v1")
 @Tag(name = "User", description = "endpoints")
 public class UserController {
 
