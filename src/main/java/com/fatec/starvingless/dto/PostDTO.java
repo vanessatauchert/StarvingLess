@@ -24,11 +24,11 @@ public class PostDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    @NotBlank(message = "Mandatory field: title")
+    @NotBlank
     @Size(min = 10, max = 50, message = "Title must be between 10 and 50 chars")
     private String title;
     @Size(min = 10, max = 250, message = "Description must be between 10 and 250 chars")
-    @NotBlank(message = "Mandatory field: description")
+    @NotBlank
     private String description;
     private URL image;
     private String datetime;
