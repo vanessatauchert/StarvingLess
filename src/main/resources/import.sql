@@ -1,0 +1,1 @@
+insert into tb_user(first_Name,last_Name, cpf, address, password, email, phone, sign_Up_Date) values ('John','Wick', '123.456.789-12', 'Baker Street', '123456789', 'john@email.com', '(11)91234-5678', '27/10/1999')
