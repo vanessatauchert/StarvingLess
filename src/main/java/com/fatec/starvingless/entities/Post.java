@@ -28,11 +28,11 @@ public class Post implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
     private URL image;
-    private String datetime;
+    private String createDate;
     private boolean threadOpen = true;
     private Integer numberOfComments;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 }
