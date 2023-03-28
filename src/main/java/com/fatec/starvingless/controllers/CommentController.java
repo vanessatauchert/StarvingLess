@@ -1,8 +1,8 @@
 package com.fatec.starvingless.controllers;
 
-import com.fatec.starvingless.dto.UserDTO;
-import com.fatec.starvingless.entities.User;
-import com.fatec.starvingless.services.UserService;
+import com.fatec.starvingless.dto.CommentDTO;
+import com.fatec.starvingless.entities.Comment;
+import com.fatec.starvingless.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
@@ -18,52 +18,52 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/starvingless/user/v1")
-@Tag(name = "User", description = "endpoints")
-public class UserController {
+@RequestMapping("/api/starvingless/comment/v1")
+@Tag(name = "Comment", description = "endpoints")
+public class CommentController {
 
     public static final String ID = "/{id}";
     @Autowired
-    private UserService service;
+    private CommentService service;
 
     @Autowired
     private ModelMapper mapper;
 
     @GetMapping("/id" + ID)
-    @Operation(summary = "Find a User by Id")
-    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
-        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
+    @Operation(summary = "Find a Cooment by Id")
+    public ResponseEntity<CommentDTO> findById(@Valid @PathVariable Long id){
+        return ResponseEntity.ok().body(mapper.map(service.findById(id), CommentDTO.class));
     }
 
     @GetMapping("/list")
     @Operation(summary = "Find all Users by page")
-    public ResponseEntity<List<UserDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
+    public ResponseEntity<List<CommentDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
                                                  @RequestParam(value= "size", defaultValue = "10") int size){
         return ResponseEntity.ok().body(service.findAll(PageRequest.of(page, size)).stream()
-                .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
+                .map(obj -> mapper.map(obj, CommentDTO.class)).collect(Collectors.toList()));
 
     }
 
     @PostMapping("/create")
     @Operation(summary = "Create a User")
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentDTO commentDTO){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
-                .buildAndExpand(service.create(userDTO).getId()).toUri();
+                .buildAndExpand(service.create(commentDTO).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/update" + ID)
     @Operation(summary = "Update a User by Id")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
-        userDTO.setId(id);
-        User updatedUser = service.update(userDTO);
-        UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
+    public ResponseEntity<CommentDTO> updateUser(@PathVariable Long id, @RequestBody @Valid CommentDTO commentDTO) {
+        commentDTO.setId(id);
+        Comment updatedUser = service.update(commentDTO);
+        CommentDTO updatedUserDTO = mapper.map(updatedUser, CommentDTO.class);
         return ResponseEntity.ok(updatedUserDTO);
     }
 
     @DeleteMapping("/delete" + ID)
     @Operation(summary = "Delete a User by Id")
-    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+    public ResponseEntity<CommentDTO> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
