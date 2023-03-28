@@ -1,15 +1,13 @@
 package com.fatec.starvingless.services;
 
 import com.fatec.starvingless.dto.CommentDTO;
-import com.fatec.starvingless.dto.PostDTO;
-import com.fatec.starvingless.dto.UserDTO;
-import com.fatec.starvingless.entities.Comment;
 import com.fatec.starvingless.entities.Comment;
 import com.fatec.starvingless.entities.Post;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.repositories.CommentRepository;
+import com.fatec.starvingless.repositories.PostRepository;
 import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.exceptions.ObjectNotFoundException;
-import com.fatec.starvingless.services.exceptions.UserAlreadyExistsException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +23,10 @@ public class CommentService {
     private ModelMapper mapper;
     @Autowired
     private CommentRepository repository;
+    @Autowired
+    private PostRepository post;
+    @Autowired
+    private UserRepository user;
 
     public Comment findById(Long id) {
         Optional<Comment> obj = repository.findById(id);
@@ -52,5 +54,17 @@ public class CommentService {
     public void delete(Long id){
         findById(id);
         repository.deleteById(id);
+    }
+
+    public Page<Comment> getByPostId(Long postId, Pageable pageable){
+        Post c = post.findById(postId).orElseThrow(() -> new
+                ObjectNotFoundException("Post not found."));
+        return repository.findByPostId(postId, pageable);
+    }
+
+    public Page<Comment> getByUserId(Long userId, Pageable pageable){
+        User c = user.findById(userId).orElseThrow(() -> new
+                ObjectNotFoundException("User not found."));
+        return repository.findByUserId(userId, pageable);
     }
 }

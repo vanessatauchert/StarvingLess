@@ -33,6 +33,7 @@ public class CommentDTO implements Serializable {
     private String createDate;
 
     private Long postId;
+
     private Long userId;
 
     public CommentDTO(Comment entity) {

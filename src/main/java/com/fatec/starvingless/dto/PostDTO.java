@@ -2,8 +2,10 @@ package com.fatec.starvingless.dto;
 
 import com.fatec.starvingless.entities.Comment;
 import com.fatec.starvingless.entities.Post;
+import com.fatec.starvingless.services.exceptions.Exception;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
 import com.fatec.starvingless.services.exceptions.InvalidNumberOfCommentsException;
+import com.fatec.starvingless.services.exceptions.InvalidPhoneException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,39 +40,34 @@ public class PostDTO implements Serializable {
     @Size(max = 250, message = "Description must be between 10 and 250 chars")
     private String description;
 
-    private String imageUrl;
+    private URL imageUrl;
     @NotBlank(message = "Required field")
     private String createDate;
     private boolean threadOpen;
-    private Integer numberOfComments;
+//    private Integer numberOfComments;
+
     private Long userId;
 
 //    private List<CommentDTO> comments;
 
-    private List<CommentDTO> comments = new ArrayList<>();
 
     public PostDTO(Post post) {
         id = post.getId();
         title = post.getTitle();
         description = post.getDescription();
-        imageUrl = post.getImage() != null ? post.getImage().toString() : null;
+        imageUrl = post.getImage();
         createDate = post.getCreateDate();
         threadOpen = post.isThreadOpen();
-        userId = post.getUser() != null ? post.getUser().getId() : null;
+        userId = post.getUser().getId();
     }
 
-    public void setNumberOfComments(Integer numberOfComments) {
-        if (numberOfComments != null && numberOfComments < 0) {
-            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");
-        }
-        this.numberOfComments = numberOfComments;
-    }
+//    public void setNumberOfComments(Integer numberOfComments) {
+//        if (numberOfComments != null && numberOfComments < 0) {
+//            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");
+//        }
+//        this.numberOfComments = numberOfComments;
+//    }
 
-    public PostDTO(Post entity, List<Comment> comments) {
-        this(entity);
-        numberOfComments = comments.size();
-        comments.forEach(comment -> this.comments.add(new CommentDTO(comment)));
-    }
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -98,5 +96,7 @@ public class PostDTO implements Serializable {
             return false;
         }
     }
+
+
 
 }

@@ -1,9 +1,11 @@
 package com.fatec.starvingless.services;
 
 import com.fatec.starvingless.dto.PostDTO;
+import com.fatec.starvingless.entities.Comment;
 import com.fatec.starvingless.entities.Post;
 import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.repositories.PostRepository;
+import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.exceptions.ObjectNotFoundException;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
@@ -24,6 +26,9 @@ public class PostService {
     @Autowired
     private PostRepository repository;
 
+    @Autowired
+    private UserRepository user;
+
 //    public Post findById(Long id) {
 //        Optional<Post> obj = repository.findById(id);
 //        return obj.orElseThrow(()-> new ObjectNotFoundException("ID not found!"));
@@ -43,7 +48,6 @@ public class PostService {
         return repository.save(mapper.map(postDTO, Post.class));
     }
 
-
     public Post update(PostDTO postDTO) {
         Post post = repository.findById(postDTO.getId()).orElseThrow(() -> new
                 ObjectNotFoundException("User not found."));
@@ -55,5 +59,11 @@ public class PostService {
     public void delete(Long id){
         findById(id);
         repository.deleteById(id);
+    }
+
+    public Page<Post> getByUserId(Long userId, Pageable pageable){
+        User c = user.findById(userId).orElseThrow(() -> new
+                ObjectNotFoundException("User not found."));
+        return repository.findByUserId(userId, pageable);
     }
 }
