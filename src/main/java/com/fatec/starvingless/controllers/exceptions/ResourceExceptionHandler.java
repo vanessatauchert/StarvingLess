@@ -1,5 +1,6 @@
 package com.fatec.starvingless.controllers.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fatec.starvingless.services.exceptions.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -122,11 +123,11 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<StandardError> httpMessageNotReadableException(
-            HttpMessageNotReadableException ex, HttpServletRequest request) {
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<StandardError> InvalidFormatException(
+            InvalidFormatException ex, HttpServletRequest request) {
         StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-                "JSON parse error - Invalid Type", ex.getMessage(), request.getRequestURI());
+                "Invalid Argument Type", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
