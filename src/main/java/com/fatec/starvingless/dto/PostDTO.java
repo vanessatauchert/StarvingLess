@@ -45,6 +45,7 @@ public class PostDTO implements Serializable {
     private String createDate;
     private boolean threadOpen;
 //    private Integer numberOfComments;
+
     private Long userId;
 
 //    private List<CommentDTO> comments;
