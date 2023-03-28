@@ -2,15 +2,19 @@ package com.fatec.starvingless.services;
 
 import com.fatec.starvingless.dto.PostDTO;
 import com.fatec.starvingless.entities.Post;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.repositories.PostRepository;
 import com.fatec.starvingless.services.exceptions.ObjectNotFoundException;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -19,6 +23,11 @@ public class PostService {
     private ModelMapper mapper;
     @Autowired
     private PostRepository repository;
+
+//    public Post findById(Long id) {
+//        Optional<Post> obj = repository.findById(id);
+//        return obj.orElseThrow(()-> new ObjectNotFoundException("ID not found!"));
+//    }
 
     public Post findById(Long id) {
         Optional<Post> obj = repository.findById(id);

@@ -1,6 +1,7 @@
 package com.fatec.starvingless.controllers;
 
 import com.fatec.starvingless.dto.PostDTO;
+import com.fatec.starvingless.dto.UserDTO;
 import com.fatec.starvingless.entities.Post;
 import com.fatec.starvingless.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;

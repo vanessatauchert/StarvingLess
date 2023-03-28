@@ -1,9 +1,8 @@
 package com.fatec.starvingless.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.starvingless.entities.Comment;
-import com.fatec.starvingless.entities.Post;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
-import com.fatec.starvingless.services.exceptions.InvalidNumberOfCommentsException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,61 +13,35 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostDTO implements Serializable {
+public class CommentDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    @NotBlank(message = "Required field")
-    @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-!]*$",
-            message = "Title cannot contain special characters")
-    @Size(min = 10, max = 50, message = "Title must be between 10 and 50 chars")
-    private String title;
     @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-!,]*$",
             message = "Description cannot contain special characters")
     @Size(max = 250, message = "Description must be between 10 and 250 chars")
+    @NotBlank
     private String description;
-
-    private String imageUrl;
     @NotBlank(message = "Required field")
     private String createDate;
-    private boolean threadOpen;
-    private Integer numberOfComments;
+
+    private Long postId;
     private Long userId;
 
-//    private List<CommentDTO> comments;
+    public CommentDTO(Comment entity) {
+        id = entity.getId();
+        description = entity.getDescription();
+        createDate = entity.getCreateDate();
+        postId = entity.getPost() != null ? entity.getPost().getId() : null;
+        userId = entity.getUser() != null ? entity.getUser().getId() : null;
 
-    private List<CommentDTO> comments = new ArrayList<>();
-
-    public PostDTO(Post post) {
-        id = post.getId();
-        title = post.getTitle();
-        description = post.getDescription();
-        imageUrl = post.getImage() != null ? post.getImage().toString() : null;
-        createDate = post.getCreateDate();
-        threadOpen = post.isThreadOpen();
-        userId = post.getUser() != null ? post.getUser().getId() : null;
-    }
-
-    public void setNumberOfComments(Integer numberOfComments) {
-        if (numberOfComments != null && numberOfComments < 0) {
-            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");
-        }
-        this.numberOfComments = numberOfComments;
-    }
-
-    public PostDTO(Post entity, List<Comment> comments) {
-        this(entity);
-        numberOfComments = comments.size();
-        comments.forEach(comment -> this.comments.add(new CommentDTO(comment)));
     }
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
