@@ -1,6 +1,7 @@
 package com.fatec.starvingless.controllers.exceptions;
 
 import com.fatec.starvingless.services.exceptions.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -9,7 +10,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.lang.Exception;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -78,7 +83,25 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler({ DataIntegrityViolationException.class })
+    public ResponseEntity<StandardError> handleError1(HttpServletRequest req, Exception ex) {
 
+//        String msg = "id not found";
+//        if (ex.getCause().getCause() instanceof DataIntegrityViolationException) {
+//
+//            StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+//                    "id not found", ex.getMessage(), req.getRequestURI());
+//            DataIntegrityViolationException e = (DataIntegrityViolationException) ex.getCause().getCause();
+//
+//        }
+//        ValidationError errors = new ValidationError(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+//                "SQL Error: 23506, SQLState: 23506", "Id not found", req.getRequestURI());
+
+        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+                "SQL Error: 23506 - Referential integrity constraint violation", "Id not found", req.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
 
 }
