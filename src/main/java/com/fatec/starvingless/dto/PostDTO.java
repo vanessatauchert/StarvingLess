@@ -44,12 +44,11 @@ public class PostDTO implements Serializable {
     @NotBlank(message = "Required field")
     private String createDate;
     private boolean threadOpen;
-    private Integer numberOfComments;
+//    private Integer numberOfComments;
     private Long userId;
 
 //    private List<CommentDTO> comments;
 
-    private List<CommentDTO> comments = new ArrayList<>();
 
     public PostDTO(Post post) {
         id = post.getId();
@@ -61,18 +60,13 @@ public class PostDTO implements Serializable {
         userId = post.getUser().getId();
     }
 
-    public void setNumberOfComments(Integer numberOfComments) {
-        if (numberOfComments != null && numberOfComments < 0) {
-            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");
-        }
-        this.numberOfComments = numberOfComments;
-    }
+//    public void setNumberOfComments(Integer numberOfComments) {
+//        if (numberOfComments != null && numberOfComments < 0) {
+//            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");
+//        }
+//        this.numberOfComments = numberOfComments;
+//    }
 
-    public PostDTO(Post entity, List<Comment> comments) {
-        this(entity);
-        numberOfComments = comments.size();
-        comments.forEach(comment -> this.comments.add(new CommentDTO(comment)));
-    }
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
