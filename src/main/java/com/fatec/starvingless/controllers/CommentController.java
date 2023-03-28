@@ -32,7 +32,7 @@ public class CommentController {
     private ModelMapper mapper;
 
     @GetMapping("/cm/id" + ID)
-    @Operation(summary = "Find a Cooment by Id")
+    @Operation(summary = "Find a Comment by Id")
     public ResponseEntity<CommentDTO> findById(@Valid @PathVariable Long id){
         return ResponseEntity.ok().body(mapper.map(service.findById(id), CommentDTO.class));
     }
