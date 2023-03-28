@@ -31,13 +31,13 @@ public class CommentController {
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping("/id" + ID)
+    @GetMapping("/cm/id" + ID)
     @Operation(summary = "Find a Cooment by Id")
     public ResponseEntity<CommentDTO> findById(@Valid @PathVariable Long id){
         return ResponseEntity.ok().body(mapper.map(service.findById(id), CommentDTO.class));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/cm/list")
     @Operation(summary = "Find all Comments by page")
     public ResponseEntity<List<CommentDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
                                                  @RequestParam(value= "size", defaultValue = "10") int size){
@@ -46,7 +46,7 @@ public class CommentController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping("/cm/create")
     @Operation(summary = "Create a Comment")
     public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentDTO commentDTO){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
@@ -54,7 +54,7 @@ public class CommentController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("/update" + ID)
+    @PutMapping("/cm/update" + ID)
     @Operation(summary = "Update a Comment by Id")
     public ResponseEntity<CommentDTO> updateUser(@PathVariable Long id, @RequestBody @Valid CommentDTO commentDTO) {
         commentDTO.setId(id);
@@ -63,14 +63,14 @@ public class CommentController {
         return ResponseEntity.ok(updatedUserDTO);
     }
 
-    @DeleteMapping("/delete" + ID)
+    @DeleteMapping("/cm/delete" + ID)
     @Operation(summary = "Delete a Comment by Id")
     public ResponseEntity<CommentDTO> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/post" + POST_ID)
+    @GetMapping("/cm/post" + POST_ID)
     @Operation(summary = "Find Comments by Post")
     public ResponseEntity<List<CommentDTO>> postId(
             @PathVariable Long postId,
@@ -82,7 +82,7 @@ public class CommentController {
 
     }
 
-    @GetMapping("/user" + USER_ID)
+    @GetMapping("/cm/user" + USER_ID)
     @Operation(summary = "Find Comments by Post")
     public ResponseEntity<List<CommentDTO>> userId(
             @PathVariable Long userId,
