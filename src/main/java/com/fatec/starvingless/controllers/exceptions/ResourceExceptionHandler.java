@@ -4,6 +4,7 @@ import com.fatec.starvingless.services.exceptions.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -97,11 +98,17 @@ public class ResourceExceptionHandler {
 //        ValidationError errors = new ValidationError(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
 //                "SQL Error: 23506, SQLState: 23506", "Id not found", req.getRequestURI());
 
-        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
-                "SQL Error: 23506 - Referential integrity constraint violation", "Id not found", req.getRequestURI());
+        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                "SQL Error: 23506 - Referential integrity constraint violation", "Id Not Found", req.getRequestURI());
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(JpaObjectRetrievalFailureException.class)
+    public ResponseEntity<StandardError> userAlreadyExistsException(Exception ex, HttpServletRequest request){
+        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                "Id Not Found", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 
 }
