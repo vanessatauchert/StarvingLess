@@ -1,5 +1,6 @@
 package com.fatec.starvingless.controllers;
 
+import com.fatec.starvingless.dto.CommentDTO;
 import com.fatec.starvingless.dto.PostDTO;
 import com.fatec.starvingless.dto.UserDTO;
 import com.fatec.starvingless.entities.Post;
@@ -17,6 +18,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.fatec.starvingless.controllers.CommentController.USER_ID;
 
 @RestController
 @RequestMapping("/api/starvingless/post/v1")
@@ -67,5 +70,17 @@ public class PostController {
     public ResponseEntity<PostDTO> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user" + USER_ID)
+    @Operation(summary = "Find Comments by Post")
+    public ResponseEntity<List<PostDTO>> userId(
+            @PathVariable Long userId,
+            @RequestParam(value = "page", defaultValue = "0")Integer page,
+            @RequestParam(value = "size", defaultValue = "10")Integer size) {
+
+        return ResponseEntity.ok().body(service.getByUserId(userId, PageRequest.of(page, size)).stream()
+                .map(obj -> mapper.map(obj, PostDTO.class)).collect(Collectors.toList()));
+
     }
 }
