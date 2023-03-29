@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,17 +23,24 @@ import java.util.stream.Collectors;
 @Tag(name = "User", description = "endpoints")
 public class UserController {
 
-    public static final String ID = "/{id}";
+    public static final String IDF = "/{id}";
+    public static final String ID = IDF;
     @Autowired
     private UserService service;
 
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping("/id" + ID)
+//    @GetMapping("/id" + ID)
+//    @Operation(summary = "Find a User by Id")
+//    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
+//        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
+//    }
+
+    @GetMapping("/id" + IDF)
     @Operation(summary = "Find a User by Id")
-    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
-        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
+    public User findById(@Valid @PathVariable String id) throws ExecutionException, InterruptedException {
+        return service.findById(id);
     }
 
     @GetMapping("/list")
@@ -61,10 +69,10 @@ public class UserController {
         return ResponseEntity.ok(updatedUserDTO);
     }
 
-    @DeleteMapping("/delete" + ID)
-    @Operation(summary = "Delete a User by Id")
-    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/delete" + ID)
+//    @Operation(summary = "Delete a User by Id")
+//    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+//        service.delete(id);
+//        return ResponseEntity.noContent().build();
+//    }
 }
