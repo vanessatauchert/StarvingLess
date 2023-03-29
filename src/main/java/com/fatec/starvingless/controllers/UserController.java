@@ -31,11 +31,8 @@ public class UserController {
     @Autowired
     private ModelMapper mapper;
 
-//    @GetMapping("/id" + ID)
-//    @Operation(summary = "Find a User by Id")
-//    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
-//        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
-//    }
+
+    // IMPLEMENTAÇÃO FIREBASE
 
     @GetMapping("/id" + IDF)
     @Operation(summary = "Find a User by Id")
@@ -43,31 +40,44 @@ public class UserController {
         return service.findById(id);
     }
 
-    @GetMapping("/list")
-    @Operation(summary = "Find all Users by page")
-    public ResponseEntity<List<UserDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
-                                                 @RequestParam(value= "size", defaultValue = "10") int size){
-        return ResponseEntity.ok().body(service.findAll(PageRequest.of(page, size)).stream()
-                .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
 
-    }
 
-    @PostMapping("/create")
-    @Operation(summary = "Create a User")
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
-                .buildAndExpand(service.create(userDTO).getId()).toUri();
-        return ResponseEntity.created(uri).build();
-    }
+    // ----------------------------------------------------------------
 
-    @PutMapping("/update" + ID)
-    @Operation(summary = "Update a User by Id")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
-        userDTO.setId(id);
-        User updatedUser = service.update(userDTO);
-        UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
-        return ResponseEntity.ok(updatedUserDTO);
-    }
+    // IMPLEMENTAÇÃO PADRÃO
+
+
+//    @GetMapping("/id" + ID)
+//    @Operation(summary = "Find a User by Id")
+//    public ResponseEntity<UserDTO> findById(@Valid @PathVariable Long id){
+//        return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
+//    }
+
+//    @GetMapping("/list")
+//    @Operation(summary = "Find all Users by page")
+//    public ResponseEntity<List<UserDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
+//                                                 @RequestParam(value= "size", defaultValue = "10") int size){
+//        return ResponseEntity.ok().body(service.findAll(PageRequest.of(page, size)).stream()
+//                .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
+//
+//    }
+//
+//    @PostMapping("/create")
+//    @Operation(summary = "Create a User")
+//    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
+//                .buildAndExpand(service.create(userDTO).getId()).toUri();
+//        return ResponseEntity.created(uri).build();
+//    }
+//
+//    @PutMapping("/update" + ID)
+//    @Operation(summary = "Update a User by Id")
+//    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+//        userDTO.setId(id);
+//        User updatedUser = service.update(userDTO);
+//        UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
+//        return ResponseEntity.ok(updatedUserDTO);
+//    }
 
 //    @DeleteMapping("/delete" + ID)
 //    @Operation(summary = "Delete a User by Id")
