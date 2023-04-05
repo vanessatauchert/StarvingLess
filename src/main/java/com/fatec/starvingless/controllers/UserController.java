@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -67,7 +68,7 @@ public class UserController {
                 .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
 
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     @Operation(summary = "Create a User")
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){
@@ -75,7 +76,7 @@ public class UserController {
                 .buildAndExpand(service.create(userDTO).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/update" + ID)
     @Operation(summary = "Update a User by Id")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
@@ -84,7 +85,7 @@ public class UserController {
         UserDTO updatedUserDTO = mapper.map(updatedUser, UserDTO.class);
         return ResponseEntity.ok(updatedUserDTO);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/delete" + ID)
     @Operation(summary = "Delete a User by Id")
     public ResponseEntity<UserDTO> delete(@PathVariable Long id){

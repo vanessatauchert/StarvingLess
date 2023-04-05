@@ -1,15 +1,10 @@
 package com.fatec.starvingless.services;
 
 import com.fatec.starvingless.dto.UserDTO;
-import com.fatec.starvingless.dto.UserFireDTO;
 import com.fatec.starvingless.entities.User;
-import com.fatec.starvingless.entities.UserFire;
 import com.fatec.starvingless.repositories.UserRepository;
 import com.fatec.starvingless.services.exceptions.ObjectNotFoundException;
 import com.fatec.starvingless.services.exceptions.UserAlreadyExistsException;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserService {
@@ -29,7 +23,9 @@ public class UserService {
     private UserRepository repository;
 
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    BCryptPasswordEncoder encoder;
+
+
 //@Autowired
 //    private final Firestore firestore;
 //@Autowired
@@ -125,10 +121,18 @@ public class UserService {
         userDTO.setId(null);
         repository.findByCpf(userDTO.getCpf()).ifPresent(u -> { throw new
                 UserAlreadyExistsException("CPF already exists.");});
-        repository.findByEmail(userDTO.getEmail()).ifPresent(u -> { throw new
-                UserAlreadyExistsException("Email already exists.");});
+        if (findByEmail(userDTO.getEmail()) != null) {
+            throw new UserAlreadyExistsException("Email already exists.");
+        }
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         return repository.save(mapper.map(userDTO, User.class));
+    }
+
+    public User findByEmail(String email) {
+        return repository.findAll().stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElse(null);
     }
 
 
@@ -139,11 +143,12 @@ public class UserService {
         repository.findByCpf(userDTO.getCpf()).filter(u -> !u.getId().equals(user.getId()))
                 .ifPresent(u -> { throw new UserAlreadyExistsException("CPF already exists."); });
 
-        repository.findByEmail(userDTO.getEmail()).filter(u -> !u.getId().equals(user.getId()))
-                .ifPresent(u -> { throw new UserAlreadyExistsException("Email already exists."); });
+        if (findByEmail(userDTO.getEmail()) != null) {
+            throw new UserAlreadyExistsException("Email already exists.");
+        }
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
 
-        User updatedUser = mapper.map(userDTO, User.class);
-//        updatedUser.setPassword(encoder.encode(user.getPassword())); //preserve original password
+        User updatedUser = mapper.map(userDTO, User.class);//preserve original password
         return mapper.map(repository.save(updatedUser), User.class);
     }
 

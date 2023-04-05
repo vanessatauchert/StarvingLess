@@ -1,6 +1,8 @@
 package com.fatec.starvingless.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.InvalidCpfException;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
@@ -9,6 +11,7 @@ import com.fatec.starvingless.services.exceptions.InvalidPhoneException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.Column;
 import javax.validation.constraints.*;
@@ -62,6 +65,9 @@ public class UserDTO implements Serializable {
     @JsonProperty("SignUpDate")
     private String signUpDate;
 
+    // token jwt
+    private String token;
+
 
     public UserDTO (User user){
         id = user.getId();
@@ -73,6 +79,18 @@ public class UserDTO implements Serializable {
         email = user.getEmail();
         phone = user.getPhone();
         signUpDate = user.getSignUpDate();
+    }
+
+    public static UserDTO create(User user, String token) {
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO dto = modelMapper.map(user, UserDTO.class);
+        dto.token = token;
+        return dto;
+    }
+
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper m = new ObjectMapper();
+        return m.writeValueAsString(this);
     }
 
     private static final Pattern CPF_PATTERN = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$");
