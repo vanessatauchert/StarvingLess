@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User user = userRep.findByEmail(username);
         if(user == null) {
-            throw new UsernameNotFoundException("user not found");
+            throw new UsernameNotFoundException("User not found");
         }
 
         return user;

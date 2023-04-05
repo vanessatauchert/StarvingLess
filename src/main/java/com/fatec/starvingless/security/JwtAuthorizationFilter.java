@@ -45,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         try {
 
             if(! JwtUtil.isTokenValid(token)) {
-                throw new AccessDeniedException("Acesso negado.");
+                throw new AccessDeniedException("Access denied");
             }
 
             String login = JwtUtil.getLogin(token);
