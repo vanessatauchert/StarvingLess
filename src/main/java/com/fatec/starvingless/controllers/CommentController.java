@@ -83,7 +83,7 @@ public class CommentController {
     }
 
     @GetMapping("/cm/user" + USER_ID)
-    @Operation(summary = "Find Comments by Post")
+    @Operation(summary = "Find Comments by User")
     public ResponseEntity<List<CommentDTO>> userId(
             @PathVariable Long userId,
             @RequestParam(value = "page", defaultValue = "0")Integer page,

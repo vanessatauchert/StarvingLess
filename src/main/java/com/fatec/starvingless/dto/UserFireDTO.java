@@ -1,9 +1,8 @@
 package com.fatec.starvingless.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fatec.starvingless.entities.User;
+import com.fatec.starvingless.entities.UserFire;
 import com.fatec.starvingless.services.exceptions.InvalidCpfException;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
 import com.fatec.starvingless.services.exceptions.InvalidEmailException;
@@ -11,10 +10,10 @@ import com.fatec.starvingless.services.exceptions.InvalidPhoneException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 
 import javax.persistence.Column;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -25,12 +24,12 @@ import java.util.regex.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO implements Serializable {
+public class UserFireDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Id")
-    private Long id;
+    private String id;
     @NotBlank(message = "Required field")
     @Size(min = 2, max = 80)
     @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-]*$",
@@ -65,11 +64,8 @@ public class UserDTO implements Serializable {
     @JsonProperty("SignUpDate")
     private String signUpDate;
 
-    // token jwt
-    private String token;
 
-
-    public UserDTO (User user){
+    public UserFireDTO(UserFire user){
         id = user.getId();
         firstName = user.getFirstName();
         lastName = user.getLastName();
@@ -79,18 +75,6 @@ public class UserDTO implements Serializable {
         email = user.getEmail();
         phone = user.getPhone();
         signUpDate = user.getSignUpDate();
-    }
-
-    public static UserDTO create(User user, String token) {
-        ModelMapper modelMapper = new ModelMapper();
-        UserDTO dto = modelMapper.map(user, UserDTO.class);
-        dto.token = token;
-        return dto;
-    }
-
-    public String toJson() throws JsonProcessingException {
-        ObjectMapper m = new ObjectMapper();
-        return m.writeValueAsString(this);
     }
 
     private static final Pattern CPF_PATTERN = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$");
