@@ -31,14 +31,14 @@ public class DBService {
     BCryptPasswordEncoder encoder;
 
     public void instanceDB(){
-        Role adminRole = new Role();
-        adminRole.setNome("ROLE_ADMIN");
-        roleRepository.save(adminRole);
-
-        User user1 = new User(null, "John", "Wick", "123.456.789-12", "Baker Street",
-                encoder.encode("123456789"), "john@email.com", "(11)91234-5678", "27/10/2021");
-        user1.setRoles(Collections.singletonList(adminRole));
-        userRepository.save(user1);
+//        Role adminRole = new Role();
+//        adminRole.setNome("ROLE_ADMIN");
+//        roleRepository.save(adminRole);
+//
+//        User user1 = new User(null, "John", "Wick", "123.456.789-12", "Baker Street",
+//                encoder.encode("123456789"), "john@email.com", "(11)91234-5678", "27/10/2021");
+//        user1.setRoles(Collections.singletonList(adminRole));
+//        userRepository.save(user1);
     }
 
 //    public void criarRole() {
