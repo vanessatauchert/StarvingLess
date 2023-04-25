@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 import java.util.Arrays;
 
@@ -59,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .addFilter(new JwtAuthenticationFilter(authManager))
                 .addFilter(new JwtAuthorizationFilter(authManager, userDetailsService))
+                .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(unauthorizedHandler)
