@@ -58,7 +58,7 @@ public class PostDTO implements Serializable {
         imageUrl = post.getImage();
         createDate = post.getCreateDate();
         threadOpen = post.isThreadOpen();
-        userId = post.getUser().getId();
+//        userId = post.getUser().getId();
     }
 
 //    public void setNumberOfComments(Integer numberOfComments) {
