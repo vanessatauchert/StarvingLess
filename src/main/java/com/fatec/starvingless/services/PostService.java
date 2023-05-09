@@ -43,9 +43,14 @@ public class PostService {
         return repository.findAll(pageable);
     }
 
-    public Post create(PostDTO postDTO){
-        postDTO.setId(null);
-        return repository.save(mapper.map(postDTO, Post.class));
+//    public Post create(PostDTO postDTO){
+//        postDTO.setId(null);
+//        return repository.save(mapper.map(postDTO, Post.class));
+//    }
+
+    public Post create(Post post){
+        post.setId(null); // Garante que o ID seja gerado automaticamente pelo banco de dados
+        return repository.save(post);
     }
 
     public Post update(PostDTO postDTO) {

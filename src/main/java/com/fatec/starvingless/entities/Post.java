@@ -33,6 +33,7 @@ public class Post implements Serializable {
     private String createDate;
     private boolean threadOpen = true;
     private Integer numberOfComments;
+    private String firstName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

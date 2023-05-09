@@ -65,10 +65,6 @@ public class PostDTO implements Serializable {
 //
     }
 
-    public PostDTO(User user){
-        firstName = user.getFirstName();
-    }
-
 //    public void setNumberOfComments(Integer numberOfComments) {
 //        if (numberOfComments != null && numberOfComments < 0) {
 //            throw new InvalidNumberOfCommentsException("The number of comments must be a positive integer.");

@@ -4,7 +4,9 @@ import com.fatec.starvingless.dto.CommentDTO;
 import com.fatec.starvingless.dto.PostDTO;
 import com.fatec.starvingless.dto.UserDTO;
 import com.fatec.starvingless.entities.Post;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.PostService;
+import com.fatec.starvingless.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
@@ -31,6 +33,9 @@ public class PostController {
     private PostService service;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ModelMapper mapper;
 
     @GetMapping("/pt/id" + ID)
@@ -48,12 +53,40 @@ public class PostController {
 
     }
 
+//    @PostMapping("/pt/create")
+//    @Operation(summary = "Create a Post")
+//    public ResponseEntity<PostDTO> create(@Valid @RequestBody PostDTO postDTO){
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
+//                .buildAndExpand(service.create(postDTO).getId()).toUri();
+//        return ResponseEntity.created(uri).build();
+//    }
+
     @PostMapping("/pt/create")
     @Operation(summary = "Create a Post")
     public ResponseEntity<PostDTO> create(@Valid @RequestBody PostDTO postDTO){
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("id" + ID)
-                .buildAndExpand(service.create(postDTO).getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        User user = userService.findById(postDTO.getUserId());
+        String firstName = user.getFirstName();
+
+        Post post = new Post();
+        post.setTitle(postDTO.getTitle());
+        post.setDescription(postDTO.getDescription());
+        post.setCreateDate(postDTO.getCreateDate());
+        post.setThreadOpen(postDTO.isThreadOpen());
+
+        // Adiciona o ID e o nome do usuário ao objeto Post
+        post.setUser(user);
+        post.setFirstName(firstName);
+
+        // Salva o objeto Post no banco de dados
+        Post savedPost = service.create(post);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedPost.getId()).toUri();
+
+        PostDTO savedPostDTO = new PostDTO(savedPost);
+        savedPostDTO.setFirstName(firstName);
+
+        return ResponseEntity.created(uri).body(new PostDTO(savedPost));
     }
 
     @PutMapping("/pt/update" + ID)
