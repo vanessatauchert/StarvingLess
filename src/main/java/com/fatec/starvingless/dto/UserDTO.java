@@ -56,7 +56,6 @@ public class UserDTO implements Serializable {
     @Size(min = 8, max = 128)
     private String password;
     @NotBlank(message = "Required field")
-    @JsonProperty("e-mail")
     private String email;
     @NotBlank(message = "Required field")
     @JsonProperty("Phone")
