@@ -2,6 +2,7 @@ package com.fatec.starvingless.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.starvingless.entities.Comment;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,8 @@ public class CommentDTO implements Serializable {
 
     private Long userId;
 
+    private String firstName;
+
     public CommentDTO(Comment entity) {
         id = entity.getId();
         description = entity.getDescription();
@@ -45,6 +48,9 @@ public class CommentDTO implements Serializable {
 
     }
 
+    public CommentDTO(User user){
+        firstName = user.getFirstName();
+    }
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public void setCreateDate(String createDate) {

@@ -2,6 +2,7 @@ package com.fatec.starvingless.dto;
 
 import com.fatec.starvingless.entities.Comment;
 import com.fatec.starvingless.entities.Post;
+import com.fatec.starvingless.entities.User;
 import com.fatec.starvingless.services.exceptions.Exception;
 import com.fatec.starvingless.services.exceptions.InvalidDateException;
 import com.fatec.starvingless.services.exceptions.InvalidNumberOfCommentsException;
@@ -48,6 +49,8 @@ public class PostDTO implements Serializable {
 
     private Long userId;
 
+    private String firstName;
+
 //    private List<CommentDTO> comments;
 
 
@@ -58,7 +61,12 @@ public class PostDTO implements Serializable {
         imageUrl = post.getImage();
         createDate = post.getCreateDate();
         threadOpen = post.isThreadOpen();
-//        userId = post.getUser().getId();
+
+//
+    }
+
+    public PostDTO(User user){
+        firstName = user.getFirstName();
     }
 
 //    public void setNumberOfComments(Integer numberOfComments) {
