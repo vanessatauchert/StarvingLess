@@ -69,7 +69,6 @@ public class UserController {
                 .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
 
     }
-    @Secured({"ROLE_ADMIN"})
     @PostMapping("/create")
     @Operation(summary = "Create a User")
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){

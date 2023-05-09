@@ -61,7 +61,11 @@ public class PostDTO implements Serializable {
         imageUrl = post.getImage();
         createDate = post.getCreateDate();
         threadOpen = post.isThreadOpen();
-
+        User user = post.getUser();
+        if (user != null) {
+            userId = user.getId();
+            firstName = user.getFirstName();
+        }
 //
     }
 
