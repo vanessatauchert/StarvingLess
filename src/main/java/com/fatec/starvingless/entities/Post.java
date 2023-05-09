@@ -33,6 +33,7 @@ public class Post implements Serializable {
     private String createDate;
     private boolean threadOpen = true;
     private Integer numberOfComments;
+    private Long userId;
     private String firstName;
 
     @JsonIgnore
