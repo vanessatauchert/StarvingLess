@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -69,6 +70,7 @@ public class UserController {
                 .map(obj -> mapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
 
     }
+    @PermitAll
     @PostMapping("/create")
     @Operation(summary = "Create a User")
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO){

@@ -54,18 +54,15 @@ public class PostDTO implements Serializable {
 //    private List<CommentDTO> comments;
 
 
-    public PostDTO(Post post) {
+    public PostDTO(Post post, String firstName) {
         id = post.getId();
         title = post.getTitle();
         description = post.getDescription();
         imageUrl = post.getImage();
         createDate = post.getCreateDate();
         threadOpen = post.isThreadOpen();
-        User user = post.getUser();
-        if (user != null) {
-            userId = user.getId();
-            firstName = user.getFirstName();
-        }
+        this.userId = post.getId();
+        this.firstName = firstName;
 //
     }
 
