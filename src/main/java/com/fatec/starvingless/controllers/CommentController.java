@@ -191,5 +191,16 @@ public class CommentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/cm/post/{postId}")
+    @Operation(summary = "Find all Comments by Post Id")
+    public ResponseEntity<List<Comment>> findAllByPostId(@PathVariable Long postId) {
+        List<Comment> comments = service.findAllByPostId(postId);
+        if (comments.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(comments);
+        }
+    }
 }
 
