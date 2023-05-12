@@ -1,6 +1,6 @@
 package com.fatec.starvingless.controllers;
 
-import com.fatec.starvingless.dto.CommentDTO;
+
 import com.fatec.starvingless.dto.PostDTO;
 import com.fatec.starvingless.dto.UserDTO;
 import com.fatec.starvingless.entities.Post;
@@ -44,6 +44,15 @@ public class PostController {
         return ResponseEntity.ok().body(mapper.map(service.findById(id), PostDTO.class));
     }
 
+//    @GetMapping("/pt/list")
+//    @Operation(summary = "Find all Posts by page")
+//    public ResponseEntity<List<PostDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
+//                                                 @RequestParam(value= "size", defaultValue = "10") int size){
+//        return ResponseEntity.ok().body(service.findAll(PageRequest.of(page, size)).stream()
+//                .map(obj -> mapper.map(obj, PostDTO.class)).collect(Collectors.toList()));
+//
+//    }
+
     @GetMapping("/pt/list")
     @Operation(summary = "Find all Posts by page")
     public ResponseEntity<List<PostDTO>> findAll(@RequestParam(value= "page", defaultValue = "0") int page,
@@ -67,14 +76,14 @@ public class PostController {
         User user = userService.findById(postDTO.getUserId());
         String firstName = user.getFirstName();
 
-        Post post = new Post();
+        PostDTO post = new PostDTO();
         post.setTitle(postDTO.getTitle());
         post.setDescription(postDTO.getDescription());
         post.setCreateDate(postDTO.getCreateDate());
         post.setThreadOpen(postDTO.isThreadOpen());
 
         // Adiciona o ID e o nome do usuário ao objeto Post
-        post.setUser(user);
+        post.setUserId(postDTO.getUserId());
         post.setFirstName(firstName);
 
         // Salva o objeto Post no banco de dados
@@ -83,10 +92,10 @@ public class PostController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedPost.getId()).toUri();
 
-        PostDTO savedPostDTO = new PostDTO(savedPost);
+        PostDTO savedPostDTO = new PostDTO(savedPost, firstName);
         savedPostDTO.setFirstName(firstName);
 
-        return ResponseEntity.created(uri).body(new PostDTO(savedPost));
+        return ResponseEntity.created(uri).body(new PostDTO(savedPost, firstName));
     }
 
     @PutMapping("/pt/update" + ID)

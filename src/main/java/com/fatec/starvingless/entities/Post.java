@@ -33,7 +33,6 @@ public class Post implements Serializable {
     private String createDate;
     private boolean threadOpen = true;
     private Integer numberOfComments;
-    private Long userId;
     private String firstName;
 
     @JsonIgnore
@@ -43,4 +42,8 @@ public class Post implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+//    public Long getUserId() {
+//        return userId;
+//    }
 }
