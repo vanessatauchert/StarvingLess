@@ -90,5 +90,9 @@ public class CommentService {
     public void deleteById(Long id) {
         commentRepository.deleteById(id);
     }
+
+    public List<Comment> findAllByPostId(Long postId) {
+        return commentRepository.findAllByPostId(postId);
+    }
 }
 

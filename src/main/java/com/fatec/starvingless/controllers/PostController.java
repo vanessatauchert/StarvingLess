@@ -102,6 +102,10 @@ public class PostController {
     @Operation(summary = "Update a Post by Id")
     public ResponseEntity<PostDTO> updateUser(@PathVariable Long id, @RequestBody @Valid PostDTO postDTO) {
         postDTO.setId(id);
+
+        User user = userService.findById(postDTO.getUserId());
+        String firstName = user.getFirstName();
+
         Post updatedPost = service.update(postDTO);
         PostDTO updatedPostDTO = mapper.map(updatedPost, PostDTO.class);
         return ResponseEntity.ok(updatedPostDTO);
